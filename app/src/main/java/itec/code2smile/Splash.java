@@ -3,6 +3,8 @@ package itec.code2smile;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,14 +12,57 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ImageView;
 
 public class Splash extends Activity {
+    private Thread mSplashThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        setContentView(R.layout.splash);
+        final Splash sPlashScreen = this;
+
+        final ImageView splashImageView =
+                (ImageView) findViewById(R.id.SplashImageView);
+        splashImageView.setBackgroundResource(R.drawable.flag);
+        final AnimationDrawable frameAnimation =
+                (AnimationDrawable)splashImageView.getBackground();
+
+        splashImageView.post(new Runnable(){
+            @Override
+            public void run() {
+                if (frameAnimation != null) {
+                    frameAnimation.start();
+                }
+            }
+        });
+
+        mSplashThread =  new Thread(){
+            @Override
+            public void run(){
+                try {
+                    synchronized(this){
+                        // Wait given period of time or exit on touch
+                        wait(5000);
+                    }
+                }
+                catch(InterruptedException ex){
+                }
+
+                finish();
+
+                // Run next activity
+                Intent intent = new Intent();
+                intent.setClass(sPlashScreen, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        mSplashThread.start();
     }
 
 
