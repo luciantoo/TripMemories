@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Button take_btn = (Button)findViewById(R.id.take_picture);
-
         take_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +50,17 @@ public class MainActivity extends Activity {
                 }
 
                 startActivityForResult(mIntent,ACTIVITY_RESULT);
+            }
+        });
+
+        Button gallery = (Button) findViewById(R.id.open_gallery);
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent galleryIntent = new Intent(getBaseContext(),GalleryActivity.class);
+                startActivity(galleryIntent);
+
             }
         });
     }

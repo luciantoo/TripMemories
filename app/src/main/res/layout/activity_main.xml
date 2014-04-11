@@ -17,9 +17,15 @@
             android:text="Take a picuture!"
             android:layout_alignParentTop="true"/>
 
+    <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/open_gallery"
+            android:text="Gallery"
+            android:layout_below="@+id/take_picture"/>
+
     <ImageView android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:id="@+id/image_view"
-               android:layout_below="@+id/take_picture"/>
+               android:layout_below="@+id/open_gallery"/>
 
 </RelativeLayout>
