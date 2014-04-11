@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 
     private final static int ACTIVITY_RESULT = 2;
     private Uri imageUri;
-    private ImageView img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
