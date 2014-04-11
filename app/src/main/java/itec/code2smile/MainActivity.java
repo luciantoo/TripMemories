@@ -32,14 +32,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-        LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
+        Button take_btn = (Button)findViewById(R.id.take_picture);
+        Log.d("take_btn",""+take_btn);
 
-        Button take_btn = new Button(this);
-        take_btn.setText("Take a picture!");
-        take_btn.setClickable(true);
         take_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,12 +57,6 @@ public class MainActivity extends Activity {
                 startActivityForResult(mIntent,ACTIVITY_RESULT);
             }
         });
-
-        img = new ImageView(this);
-
-        ll.addView(take_btn);
-        ll.addView(img);
-        setContentView(ll);
     }
 
 
@@ -100,7 +91,7 @@ public class MainActivity extends Activity {
 
                 try {
 
-                    //ImageView img = (ImageView)findViewById(R.id.image_view);
+                    ImageView img = (ImageView)findViewById(R.id.image_view);
 
                     InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
                     BitmapFactory.Options options = new BitmapFactory.Options();
