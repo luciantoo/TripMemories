@@ -35,14 +35,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Button take_btn = (Button)findViewById(R.id.take_picture);
-        Log.d("take_btn",""+take_btn);
 
         take_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.d("onClick","s-a apasat");
-
                 Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
 
                 String state = Environment.getExternalStorageState();
