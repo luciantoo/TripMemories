@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name="itec.code2smile.MainActivity"
-            android:label="The Main Activity" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT"/>

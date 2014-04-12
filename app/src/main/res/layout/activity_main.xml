@@ -4,14 +4,6 @@
                 android:layout_height="match_parent"
                 android:background="#ff000000">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 xmlns:tools="http://schemas.android.com/tools"
-                 android:id="@+id/container"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 tools:context="itec.code2smile.MainActivity"
-                 tools:ignore="MergeRootFrame" />
-
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
@@ -21,7 +13,7 @@
         <Button android:layout_width="match_parent"
                 android:layout_height="@dimen/items_height"
                 android:id="@+id/take_picture"
-                android:text="Take a picuture"
+                android:text="Take a picture"
                 android:textStyle="bold"
                 android:textColor="@color/settings_text_color"
                 android:textSize="@dimen/font_medium"
