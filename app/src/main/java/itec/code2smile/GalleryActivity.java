@@ -16,12 +16,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Gallery;
-import android.widget.ImageView;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -59,6 +56,8 @@ public class GalleryActivity extends Activity {
     private ImageView picView;
 
     private PicAdapter imgAdapt;
+
+    private Button take_button;
 
     public class PicAdapter extends BaseAdapter {
 
@@ -228,25 +227,10 @@ public class GalleryActivity extends Activity {
 
         picGallery = (Gallery) findViewById(R.id.gallery);
 
-        imgAdapt = new PicAdapter(this);
-
-        picGallery.setAdapter(imgAdapt);
-
-
-
-
-        picGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-
-                currentPic = position;
-
-//                Intent pickIntent = new Intent();
-//                pickIntent.setType("image/*");
-//                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-//
-//                startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICKER);
-
-
+        take_button = (Button)findViewById(R.id.take_pic);
+        take_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
 
                 String state = Environment.getExternalStorageState();
@@ -259,9 +243,13 @@ public class GalleryActivity extends Activity {
 
 
                 startActivityForResult(mIntent, PICKER);
-                return true;
             }
         });
+
+
+        imgAdapt = new PicAdapter(this);
+
+        picGallery.setAdapter(imgAdapt);
 
         picGallery.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
