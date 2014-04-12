@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
                 String albumName = kAName + albumIndex.toString();
                 Album newAlbum = new Album(albumIndex,albumName,null);
                 albumList.add(newAlbum);
+
                 Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
                 albumIndex = Singleton.mySettings.getAlbumIndex();
                 Log.d(TAG,"newAlbumIndex:"+albumIndex.toString());
@@ -94,7 +95,10 @@ public class MainActivity extends Activity {
                 }
                 Singleton.mySettings.writeAlbumNames(albumNames);
                 Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
-                //listView.addView();
+
+                cstAdapter = new CustomAdapter(getBaseContext(), albumList);
+
+                listView.setAdapter(cstAdapter);
             }
         });
 
@@ -105,22 +109,6 @@ public class MainActivity extends Activity {
                 Log.d(TAG,"delete_album");
             }
         });
-
-        ArrayList<String> justToTest = new ArrayList<String>();
-        String alb = new String("dsada");
-        justToTest.add(alb);
-        justToTest.add(alb);
-        justToTest.add(alb);
-
-        //populate the listview
-
-        for(int i=0;i<10;i++)
-        {
-            Album my_Album;
-            int itemid = 100 + i;
-            my_Album = new Album(itemid,"Values",justToTest);
-            albumList.add(my_Album);
-        }
 
         cstAdapter = new CustomAdapter(getBaseContext(), albumList);
 
