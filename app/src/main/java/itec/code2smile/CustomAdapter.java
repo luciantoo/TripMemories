@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -46,6 +47,14 @@ public class CustomAdapter extends BaseAdapter {
         final int Itemposition = position;
         View view = new CustomView(this.context, myAlbum);
 
+        ImageView imageView = (ImageView) view.findViewById(CustomView.getPictureId());
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener!=null)
+                    listener.onPictureClickListener(v,myAlbum,Itemposition);
+            }
+        });
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

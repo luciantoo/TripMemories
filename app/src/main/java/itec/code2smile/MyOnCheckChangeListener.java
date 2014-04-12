@@ -7,4 +7,5 @@ import android.view.View;
  */
 public interface MyOnCheckChangeListener {
     void onItemClickListener(View view, Album item, int position);
+    void onPictureClickListener(View view,Album album,int position);
 }
