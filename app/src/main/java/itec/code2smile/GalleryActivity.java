@@ -119,7 +119,7 @@ public class GalleryActivity extends Activity {
                                 bmpOptions.inJustDecodeBounds = false;
                                 placeholder = BitmapFactory.decodeFile(imgPath, bmpOptions);
                                 imageBitmaps.add(placeholder);
-//                        PicAdapter imgAdapt = new PicAdapter(this);
+
                             }
 
 
@@ -156,17 +156,12 @@ public class GalleryActivity extends Activity {
                             bmpOptions.inJustDecodeBounds = false;
                             placeholder = BitmapFactory.decodeFile(imgPath, bmpOptions);
                             imageBitmaps.add(placeholder);
-//                        PicAdapter imgAdapt = new PicAdapter(this);
+
                         }
 
                     }
                 }
             }
-
-
-
-//            for (int i = 0; i < imageBitmaps.length; i++)
-//                imageBitmaps[i] = placeholder;
 
             TypedArray styleAttrs = galleryContext.obtainStyledAttributes(R.styleable.PicGallery);
 
@@ -237,8 +232,6 @@ public class GalleryActivity extends Activity {
                 photoFile = new File(Singleton.m_szPictDir, albumName + count + albumName + ".jpg");
                 count++;
                 mIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-//                    Uri imageUri = Uri.fromFile(photoFile);
-
 
                 startActivityForResult(mIntent, PICKER);
             }
@@ -248,6 +241,33 @@ public class GalleryActivity extends Activity {
         imgAdapt = new PicAdapter(this);
 
         picGallery.setAdapter(imgAdapt);
+
+        picGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                File photo = new File(Singleton.m_szPictDir,pictureNames.get(position));
+
+                String fileName = pictureNames.get(position);
+                char a_char = fileName.charAt(13);
+
+                Log.d("a_char",""+a_char);
+                Log.d("int_a_char",""+(int)a_char);
+
+                int val = (int)a_char - 48 + 1;
+                String newFileName = fileName.substring(0,12)+val+".jpg";
+
+                File newFile = new File(Singleton.m_szPictDir,newFileName);
+
+                photo.renameTo(newFile);
+
+                Toast.makeText(getApplicationContext(),
+                        "Selected image has been transfered!", Toast.LENGTH_LONG)
+                        .show();
+
+                return true;
+            }
+        });
 
         picGallery.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -348,8 +368,6 @@ public class GalleryActivity extends Activity {
                     bmpOptions.inJustDecodeBounds = false;
                     pic = BitmapFactory.decodeFile(imgPath, bmpOptions);
 
-//                        PicAdapter imgAdapt = new PicAdapter(this);
-
                     imgAdapt.addPic(pic);
 
                     picGallery.setAdapter(imgAdapt);
@@ -409,8 +427,6 @@ public class GalleryActivity extends Activity {
                         bmpOptions.inSampleSize = sampleSize;
                         bmpOptions.inJustDecodeBounds = false;
                         pic = BitmapFactory.decodeFile(imgPath, bmpOptions);
-
-//                        PicAdapter imgAdapt = new PicAdapter(this);
 
                         imgAdapt.addPic(pic);
 
