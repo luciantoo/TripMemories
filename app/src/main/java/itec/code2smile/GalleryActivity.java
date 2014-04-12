@@ -248,7 +248,16 @@ public class GalleryActivity extends Activity {
 
                 File photo = new File(Singleton.m_szPictDir,pictureNames.get(position));
 
-                File newFile = new File(Singleton.m_szPictDir,pictureNames.get(position)+"test"+".jpg");
+                String fileName = pictureNames.get(position);
+                char a_char = fileName.charAt(13);
+
+                Log.d("a_char",""+a_char);
+                Log.d("int_a_char",""+(int)a_char);
+
+                int val = (int)a_char - 48 + 1;
+                String newFileName = fileName.substring(0,12)+val+".jpg";
+
+                File newFile = new File(Singleton.m_szPictDir,newFileName);
 
                 photo.renameTo(newFile);
 
