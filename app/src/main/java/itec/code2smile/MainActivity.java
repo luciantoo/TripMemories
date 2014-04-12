@@ -46,11 +46,10 @@ public class MainActivity extends Activity {
         justToTest.add(alb);
         justToTest.add(alb);
         justToTest.add(alb);
-        if(Singleton.mySettings.getAlbumNames()!=null){
-            Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
-            for(String name : Singleton.mySettings.getAlbumNames()){
-                albumList.add(new Album(albumIndex,name,null));
-            }
+
+        Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+        for(String name : Singleton.mySettings.getAlbumNames()){
+            albumList.add(new Album(albumIndex,name,null));
         }
 
 
@@ -148,7 +147,6 @@ public class MainActivity extends Activity {
                 }
 
                 Singleton.mySettings.writeAlbumNames(albumNames);
-
                 cstAdapter.notifyDataSetChanged();
             }
         });
