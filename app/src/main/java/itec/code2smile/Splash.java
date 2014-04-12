@@ -46,7 +46,7 @@ public class Splash extends Activity {
                 try {
                     synchronized(this){
                         // Wait given period of time or exit on touch
-                        wait(5000);
+                        wait(3600);
                     }
                 }
                 catch(InterruptedException ex){

@@ -4,12 +4,13 @@
     android:id="@+id/flaganim"
     android:oneshot="false"
     >
-    <item android:drawable="@drawable/glasses" android:duration="100" />
-    <item android:drawable="@drawable/launcher" android:duration="100" />
-    <item android:drawable="@drawable/glasses" android:duration="100" />
-    <item android:drawable="@drawable/launcher" android:duration="100" />
-    <item android:drawable="@drawable/glasses" android:duration="100" />
-    <item android:drawable="@drawable/launcher" android:duration="100" />
-    <item android:drawable="@drawable/glasses" android:duration="100" />
-    <item android:drawable="@drawable/launcher" android:duration="100" />
+    <item android:drawable="@drawable/img0" android:duration="450" />
+    <item android:drawable="@drawable/img2" android:duration="350" />
+    <item android:drawable="@drawable/img1" android:duration="550" />
+    <item android:drawable="@drawable/img22" android:duration="350" />
+    <item android:drawable="@drawable/img3" android:duration="350" />
+    <item android:drawable="@drawable/img4" android:duration="550" />
+    <item android:drawable="@drawable/img3" android:duration="450" />
+    <item android:drawable="@drawable/img4" android:duration="550" />
+
 </animation-list>

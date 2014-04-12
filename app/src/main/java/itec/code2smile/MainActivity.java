@@ -18,7 +18,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity {
@@ -34,6 +38,12 @@ public class MainActivity extends Activity {
     private HashSet<String> albumNames;
     private CustomAdapter cstAdapter;
 
+    private class AlbumNameComparator implements Comparator<Album> {
+        public int compare(Album a1, Album a2) {
+            return a1.getName().compareTo(a2.getName());
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +58,10 @@ public class MainActivity extends Activity {
             for(String name : Singleton.mySettings.getAlbumNames()){
                 albumList.add(new Album(albumIndex,name,null));
             }
+            Collections.sort(albumList,new AlbumNameComparator());
         }
         pictIndex = new Integer(0);
+
 
         Log.d("Album index",albumIndex.toString());
         final ListView listView = (ListView)findViewById(R.id.list_view);
@@ -94,7 +106,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Log.d(TAG,"create_album");
 
-                Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
+                Singleton.mySettings.incrementAlbumIndex(albumIndex + 1);
                 albumIndex = Singleton.mySettings.getAlbumIndex();
 
                 Log.d(TAG,"albumIndex:"+albumIndex.toString());
@@ -111,7 +123,7 @@ public class MainActivity extends Activity {
                 }
 
                 Singleton.mySettings.writeAlbumNames(albumNames);
-                Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+                Log.d(TAG, Singleton.mySettings.getAlbumNames().toString());
 
                 Toast.makeText(getApplicationContext(),
                         "Album" + albumIndex + " has been created", Toast.LENGTH_LONG)
@@ -140,6 +152,21 @@ public class MainActivity extends Activity {
                 Toast.makeText(getApplicationContext(),
                         "Clicked on Image! On position :  "+position+"  ItemName:  " +album.getName(), Toast.LENGTH_LONG)
                         .show();
+                String aN = album.getName();
+                File dir = new File(Singleton.m_szPictDir);
+                File[] dirListing = dir.listFiles();
+                for(File f : dirListing){
+                    String tag = f.getName().toString();
+                    if(tag.length()==19){
+                        tag = tag.substring(0,7);
+                    }else{
+                        tag = tag.substring(0,6);
+                    }
+                    Log.d(TAG,tag+"_"+aN);
+                    if (aN.equals(tag)) {
+                        f.delete();
+                    }
+                }
                 albumList.remove(position);
                 albumNames.clear();
                 for(Album i : albumList){
