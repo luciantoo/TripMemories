@@ -44,7 +44,8 @@ public class MainActivity extends Activity {
                 if (Environment.MEDIA_MOUNTED.equals(state))
                 {
                     Log.d("State",state);
-                    File photoFile = new File(Environment.getExternalStorageDirectory(),"photo.jpg");
+                    Log.d("File created:",Singleton.m_szWorkDir);
+                    File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
                     mIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
                     imageUri = Uri.fromFile(photoFile);
                 }

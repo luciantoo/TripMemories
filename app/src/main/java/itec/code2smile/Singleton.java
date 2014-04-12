@@ -22,6 +22,7 @@ public class Singleton extends Application {
     public static ContextWrapper m_ContextWrp;
     public static String m_szWorkDir="";
     public static String TAG="MainActivity";
+    public static String m_szPictDir="";
 
     public Singleton(){
         super();
@@ -52,10 +53,14 @@ public class Singleton extends Application {
         } else {
             m_szSaveFolder = m_ContextWrp.getFilesDir().getAbsolutePath();
         }
-        m_szWorkDir = m_szSaveFolder + "/work";
+        m_szWorkDir = m_szSaveFolder + "/trip_memories";
 
         File filesd = new File(m_szWorkDir);
         filesd.mkdirs();
+
+        m_szPictDir = m_szWorkDir + "/pictures";
+        File filesp = new File(m_szPictDir);
+        filesp.mkdirs();
 
     }
 
