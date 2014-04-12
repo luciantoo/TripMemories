@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MainActivity extends Activity {
@@ -28,9 +29,10 @@ public class MainActivity extends Activity {
     private final static String INTENT_EXTRA_TAG = "albumName";
     private Uri imageUri;
     private Integer albumIndex;
+    private Integer pictIndex;
     private String TAG = "MainActivity";
     private ArrayList<Album> albumList;
-    private HashSet<String> albumNames;
+    private LinkedHashSet<String> albumNames;
     private CustomAdapter cstAdapter;
 
     @Override
@@ -38,20 +40,17 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         albumList = new ArrayList<Album>();
-        albumNames = new HashSet<String>();
+        albumNames = new LinkedHashSet<String>();
         albumIndex = Singleton.mySettings.getAlbumIndex();
 
-        ArrayList<String> justToTest = new ArrayList<String>();
-        String alb = new String("dsada");
-        justToTest.add(alb);
-        justToTest.add(alb);
-        justToTest.add(alb);
-
-        Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
-        for(String name : Singleton.mySettings.getAlbumNames()){
-            albumList.add(new Album(albumIndex,name,null));
+        
+        if(Singleton.mySettings.getAlbumNames()!=null){
+            Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+            for(String name : Singleton.mySettings.getAlbumNames()){
+                albumList.add(new Album(albumIndex,name,null));
+            }
         }
-
+        pictIndex = new Integer(0);
 
         Log.d("Album index",albumIndex.toString());
         final ListView listView = (ListView)findViewById(R.id.list_view);
@@ -67,9 +66,11 @@ public class MainActivity extends Activity {
                 {
                     Log.d("State",state);
                     Log.d("File created:",Singleton.m_szWorkDir);
-                    File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
+                    File photoFile = new File(Singleton.m_szPictDir,
+                            kAName+albumIndex+pictIndex+kAName+albumIndex+".jpg");
                     mIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
                     imageUri = Uri.fromFile(photoFile);
+                    pictIndex++;
                 }
 
                 startActivityForResult(mIntent,ACTIVITY_RESULT);
@@ -93,6 +94,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"create_album");
+
+                Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
                 albumIndex = Singleton.mySettings.getAlbumIndex();
 
                 Log.d(TAG,"albumIndex:"+albumIndex.toString());
@@ -114,8 +117,6 @@ public class MainActivity extends Activity {
                 Toast.makeText(getApplicationContext(),
                         "Album" + albumIndex + " has been created", Toast.LENGTH_LONG)
                         .show();
-
-                Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
 
                 cstAdapter.notifyDataSetChanged();
             }
