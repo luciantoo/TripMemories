@@ -11,32 +11,32 @@ public class Album {
 
     private String name;
 
-    private ArrayList<String> strings;
+    private ArrayList<String> photoNames;
 
     public Album(int id,String name, ArrayList<String> strings){
-        this.id=id;
-        this.name=name;
-        this.strings=strings;
+        this.id = id;
+        this.name = name;
+        this.photoNames = strings;
     }
 
     public void setName(String name){
-        this.name=name;
+        this.name = name;
     }
 
     public String getName(){
         return name;
     }
 
-    public void setStrings(ArrayList<String> strings){
-        this.strings=strings;
+    public void setPhotoNames(ArrayList<String> photoNames){
+        this.photoNames = photoNames;
     }
 
-    public ArrayList<String> getStrings(){
-        return strings;
+    public ArrayList<String> getPhotoNames(){
+        return photoNames;
     }
 
     public void setId(int id){
-        this.id=id;
+        this.id = id;
     }
 
     public int getId(){

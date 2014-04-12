@@ -1,7 +1,6 @@
 package itec.code2smile;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,17 +9,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
@@ -29,8 +25,9 @@ public class MainActivity extends Activity {
     private Uri imageUri;
     private Integer albumIndex;
     private String TAG = "MainActivity";
-    private ArrayList<Album> strings;
+    private ArrayList<Album> albumList;
     private CustomAdapter cstAdapter;
+    private int contor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +76,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Log.d(TAG,"create_album");
 
-                //Album my_album = new Album();
+                //Album my_album = new Album(contor,nume_album_citit,null);
 
                 //listView.addView();
             }
@@ -100,16 +97,16 @@ public class MainActivity extends Activity {
         justToTest.add(alb);
 
         //populate the listview
-        strings = new ArrayList<Album>();
+        albumList = new ArrayList<Album>();
         for(int i=0;i<10;i++)
         {
             Album my_Album;
             int itemid = 100 + i;
             my_Album = new Album(itemid,"Values",justToTest);
-            strings.add(my_Album);
+            albumList.add(my_Album);
         }
 
-        cstAdapter = new CustomAdapter(getBaseContext(),strings);
+        cstAdapter = new CustomAdapter(getBaseContext(), albumList);
 
         listView.setAdapter(cstAdapter);
 
