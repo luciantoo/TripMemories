@@ -1,6 +1,7 @@
 package itec.code2smile;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -22,11 +23,15 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 /**
  * Created by Sined on 4/12/2014.
  */
-public class GalleryActivity extends Activity{
+public class GalleryActivity extends Activity {
 
     private final GalleryActivity GA = this;
 
@@ -34,9 +39,19 @@ public class GalleryActivity extends Activity{
 
     private final String TAG = "Gallery activity";
 
-    private File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
+    private final static String INTENT_EXTRA_TAG = "albumName";
+
+    private int count;
+
+    private String albumName;
+
+    private File photoFile = new File(Singleton.m_szPictDir, "photo.jpg");
+
+    private LinkedList<String> pictureNames;
 
     private int currentPic = 0;
+
+    private ProgressDialog progressDialog;
 
     private Gallery picGallery;
 
@@ -58,12 +73,12 @@ public class GalleryActivity extends Activity{
 
             galleryContext = c;
 
-            imageBitmaps  = new Bitmap[3];
+            imageBitmaps = new Bitmap[10];
 
             placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 
-            for(int i=0; i<imageBitmaps.length; i++)
-                imageBitmaps[i]=placeholder;
+            for (int i = 0; i < imageBitmaps.length; i++)
+                imageBitmaps[i] = placeholder;
 
             TypedArray styleAttrs = galleryContext.obtainStyledAttributes(R.styleable.PicGallery);
 
@@ -99,13 +114,11 @@ public class GalleryActivity extends Activity{
             return imageView;
         }
 
-        public void addPic(Bitmap newPic)
-        {
+        public void addPic(Bitmap newPic) {
             imageBitmaps[currentPic] = newPic;
         }
 
-        public Bitmap getPic(int posn)
-        {
+        public Bitmap getPic(int posn) {
             return imageBitmaps[posn];
         }
     }
@@ -115,7 +128,12 @@ public class GalleryActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gallery_activity);
 
-        picView= (ImageView) findViewById(R.id.picture);
+        pictureNames = new LinkedList<String>();
+
+        Intent receivedIntent = getIntent();
+        albumName = receivedIntent.getStringExtra(INTENT_EXTRA_TAG);
+
+        picView = (ImageView) findViewById(R.id.picture);
 
         picGallery = (Gallery) findViewById(R.id.gallery);
 
@@ -123,8 +141,11 @@ public class GalleryActivity extends Activity{
 
         picGallery.setAdapter(imgAdapt);
 
+        progressDialog = ProgressDialog.show(this, "Loading", "Please wait...");
+
         PhotoUpdater pU = new PhotoUpdater();
-        pU.run();
+//        pU.run();
+        runOnUiThread(pU);
 
         picGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
@@ -141,14 +162,15 @@ public class GalleryActivity extends Activity{
                 Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
 
                 String state = Environment.getExternalStorageState();
-                    Log.d("State", state);
-                    Log.d("File created:",Singleton.m_szWorkDir);
-                    photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
-                    mIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
+                Log.d("State", state);
+                Log.d("File created:", Singleton.m_szWorkDir);
+                photoFile = new File(Singleton.m_szPictDir, albumName + count + albumName + ".jpg");
+                count++;
+                mIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
 //                    Uri imageUri = Uri.fromFile(photoFile);
 
 
-                startActivityForResult(mIntent,PICKER);
+                startActivityForResult(mIntent, PICKER);
                 return true;
             }
         });
@@ -160,40 +182,126 @@ public class GalleryActivity extends Activity{
                 picView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                 Integer poz = new Integer(position);
-                Log.d(TAG,"Tapped @ position "+poz.toString());
+                Log.d(TAG, "Tapped @ position " + poz.toString());
 
             }
         });
 
     }
-        private class PhotoUpdater extends Thread{
-            public void run() {
-                GA.onActivityResult(PICKER, RESULT_OK, null);
+
+    private class PhotoUpdater implements Runnable {
+        public void run() {
+            File dir = new File(Singleton.m_szPictDir);
+            File[] dirListing = dir.listFiles();
+            if (dirListing != null) {
+                for (File pict : dirListing){
+                    if(albumName!="gallery"){
+                        String tag = pict.getName().toString();
+                        tag = tag.substring(0,7);
+                        Log.d(TAG,tag+"_"+albumName);
+                        if (albumName.equals(tag)) {
+                            Log.d(TAG, pict.getName().toString());
+                            pictureNames.add(pict.getName().toString());
+                            GA.putPictures(PICKER, RESULT_OK, Uri.fromFile(
+                                new File(Singleton.m_szPictDir, pict.getName().toString())));
+                        }
+                    }
+                    else{
+                        Log.d(TAG, pict.getName().toString());
+                        pictureNames.add(pict.getName().toString());
+                        GA.putPictures(PICKER, RESULT_OK, Uri.fromFile(
+                                new File(Singleton.m_szPictDir, pict.getName().toString())));
+                    }
+                }
+            }
+            progressDialog.dismiss();
+
+        }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICKER) {
+                Uri pickedUri = Uri.fromFile(photoFile);
+                Bitmap pic = null;
+                String imgPath = "";
+
+
+                String[] medData = {MediaStore.Images.Media.DATA};
+
+                Cursor picCursor = managedQuery(pickedUri, medData, null, null, null);
+                if (picCursor != null) {
+                    int index = picCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    picCursor.moveToFirst();
+                    imgPath = picCursor.getString(index);
+                } else
+                    imgPath = pickedUri.getPath();
+
+                if (pickedUri != null) {
+                    int targetWidth = 600;
+                    int targetHeight = 400;
+
+                    BitmapFactory.Options bmpOptions = new BitmapFactory.Options();
+                    bmpOptions.inJustDecodeBounds = true;
+                    BitmapFactory.decodeFile(imgPath, bmpOptions);
+
+                    int currHeight = bmpOptions.outHeight;
+                    int currWidth = bmpOptions.outWidth;
+
+                    int sampleSize = 1;
+
+                    if (currHeight > targetHeight || currWidth > targetWidth) {
+                        //use either width or height
+                        if (currWidth > currHeight)
+                            sampleSize = Math.round((float) currHeight / (float) targetHeight);
+                        else
+                            sampleSize = Math.round((float) currWidth / (float) targetWidth);
+                    }
+
+                    bmpOptions.inSampleSize = sampleSize;
+                    bmpOptions.inJustDecodeBounds = false;
+                    pic = BitmapFactory.decodeFile(imgPath, bmpOptions);
+
+//                        PicAdapter imgAdapt = new PicAdapter(this);
+
+                    imgAdapt.addPic(pic);
+
+                    picGallery.setAdapter(imgAdapt);
+
+                    picView.setImageBitmap(pic);
+
+                    picView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                }
             }
         }
 
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-            if (resultCode == RESULT_OK) {
-                if (requestCode == PICKER) {
-                    Uri pickedUri = Uri.fromFile(photoFile);
+
+    protected void putPictures(int requestCode, int resultCode, Uri uri) {
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICKER) {
+                    Uri pickedUri = uri;
+
                     Bitmap pic = null;
                     String imgPath = "";
 
 
-                    String[] medData = { MediaStore.Images.Media.DATA };
+                    String[] medData = {MediaStore.Images.Media.DATA};
 
                     Cursor picCursor = managedQuery(pickedUri, medData, null, null, null);
-                    if(picCursor!=null)
-                    {
+                    if (picCursor != null) {
                         int index = picCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                         picCursor.moveToFirst();
                         imgPath = picCursor.getString(index);
-                    }
-                    else
+                    } else
                         imgPath = pickedUri.getPath();
 
-                    if(pickedUri!=null) {
+                    if (pickedUri != null) {
                         int targetWidth = 600;
                         int targetHeight = 400;
 
@@ -206,13 +314,12 @@ public class GalleryActivity extends Activity{
 
                         int sampleSize = 1;
 
-                        if (currHeight>targetHeight || currWidth>targetWidth)
-                        {
+                        if (currHeight > targetHeight || currWidth > targetWidth) {
                             //use either width or height
-                            if (currWidth>currHeight)
-                                sampleSize = Math.round((float)currHeight/(float)targetHeight);
+                            if (currWidth > currHeight)
+                                sampleSize = Math.round((float) currHeight / (float) targetHeight);
                             else
-                                sampleSize = Math.round((float)currWidth/(float)targetWidth);
+                                sampleSize = Math.round((float) currWidth / (float) targetWidth);
                         }
 
                         bmpOptions.inSampleSize = sampleSize;
@@ -228,12 +335,13 @@ public class GalleryActivity extends Activity{
                         picView.setImageBitmap(pic);
 
                         picView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    }
-                }
-            }
 
-            super.onActivityResult(requestCode, resultCode, data);
+                    }
+
+            }
         }
+
+    }
 }
 
 

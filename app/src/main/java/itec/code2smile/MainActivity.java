@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 
     private final static String kAName = "Album";
     private final static int ACTIVITY_RESULT = 2;
+    private final static String INTENT_EXTRA_TAG = "albumName";
     private Uri imageUri;
     private Integer albumIndex;
     private String TAG = "MainActivity";
@@ -81,6 +82,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 Intent galleryIntent = new Intent(getBaseContext(),GalleryActivity.class);
+                galleryIntent.putExtra(INTENT_EXTRA_TAG,"gallery");
                 startActivity(galleryIntent);
 
             }
@@ -124,6 +126,7 @@ public class MainActivity extends Activity {
                         .show();
 
                 Intent galleryIntent = new Intent(getBaseContext(),GalleryActivity.class);
+                galleryIntent.putExtra(INTENT_EXTRA_TAG,item.getName());
                 startActivity(galleryIntent);
 
             }
@@ -134,6 +137,12 @@ public class MainActivity extends Activity {
                         "Clicked on Image! On position :  "+position+"  ItemName:  " +album.getName(), Toast.LENGTH_LONG)
                         .show();
                 albumList.remove(position);
+                albumNames.clear();
+                for(Album i : albumList){
+                    albumNames.add(i.getName());
+                }
+
+                Singleton.mySettings.writeAlbumNames(albumNames);
                 cstAdapter.notifyDataSetChanged();
             }
         });
