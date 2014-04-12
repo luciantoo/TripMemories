@@ -28,7 +28,11 @@ import java.io.File;
  */
 public class GalleryActivity extends Activity{
 
+    private final GalleryActivity GA = this;
+
     private final int PICKER = 1;
+
+    private final String TAG = "Gallery activity";
 
     private File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
 
@@ -118,6 +122,10 @@ public class GalleryActivity extends Activity{
         imgAdapt = new PicAdapter(this);
 
         picGallery.setAdapter(imgAdapt);
+
+        PhotoUpdater pU = new PhotoUpdater();
+        pU.run();
+
         picGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
 
@@ -147,13 +155,23 @@ public class GalleryActivity extends Activity{
 
         picGallery.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
                 picView.setImageBitmap(imgAdapt.getPic(position));
+                imgAdapt.notifyDataSetChanged();
+                picView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                Integer poz = new Integer(position);
+                Log.d(TAG,"Tapped @ position "+poz.toString());
 
             }
         });
 
     }
+        private class PhotoUpdater extends Thread{
+            public void run() {
+                GA.onActivityResult(PICKER, RESULT_OK, null);
+            }
+        }
+
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
             if (resultCode == RESULT_OK) {
@@ -201,7 +219,7 @@ public class GalleryActivity extends Activity{
                         bmpOptions.inJustDecodeBounds = false;
                         pic = BitmapFactory.decodeFile(imgPath, bmpOptions);
 
-                        PicAdapter imgAdapt = new PicAdapter(this);
+//                        PicAdapter imgAdapt = new PicAdapter(this);
 
                         imgAdapt.addPic(pic);
 
