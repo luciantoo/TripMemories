@@ -9,7 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,12 +21,16 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
+import java.io.File;
+
 /**
  * Created by Sined on 4/12/2014.
  */
 public class GalleryActivity extends Activity{
 
     private final int PICKER = 1;
+
+    private File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
 
     private int currentPic = 0;
 
@@ -117,12 +123,24 @@ public class GalleryActivity extends Activity{
 
                 currentPic = position;
 
-                Intent pickIntent = new Intent();
-                pickIntent.setType("image/*");
-                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+//                Intent pickIntent = new Intent();
+//                pickIntent.setType("image/*");
+//                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+//
+//                startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICKER);
 
-                startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICKER);
 
+                Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+
+                String state = Environment.getExternalStorageState();
+                    Log.d("State", state);
+                    Log.d("File created:",Singleton.m_szWorkDir);
+                    photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
+                    mIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
+//                    Uri imageUri = Uri.fromFile(photoFile);
+
+
+                startActivityForResult(mIntent,PICKER);
                 return true;
             }
         });
@@ -140,7 +158,7 @@ public class GalleryActivity extends Activity{
 
             if (resultCode == RESULT_OK) {
                 if (requestCode == PICKER) {
-                    Uri pickedUri = data.getData();
+                    Uri pickedUri = Uri.fromFile(photoFile);
                     Bitmap pic = null;
                     String imgPath = "";
 
