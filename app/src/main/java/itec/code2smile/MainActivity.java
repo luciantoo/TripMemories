@@ -109,6 +109,10 @@ public class MainActivity extends Activity {
                 Singleton.mySettings.writeAlbumNames(albumNames);
                 Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
 
+                Toast.makeText(getApplicationContext(),
+                        "Album" + albumIndex + " has been created", Toast.LENGTH_LONG)
+                        .show();
+
                 Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
 
                 cstAdapter.notifyDataSetChanged();

@@ -19,7 +19,6 @@ public class CustomView extends RelativeLayout{
         super(context);
 
         setPadding(0, 6, 0, 6);
-        //setBackground(getResources().getDrawable(R.drawable.album));
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(itemH,itemH);
         params.setMargins(20, 0, 20, 0);
@@ -27,18 +26,19 @@ public class CustomView extends RelativeLayout{
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 
         ImageView ivLogo = new ImageView(context);
-        ivLogo.setImageDrawable(context.getResources().getDrawable(R.drawable.delete));
+        ivLogo.setImageDrawable(context.getResources().getDrawable(R.drawable.delete1));
         addView(ivLogo, params);
         ivLogo.setId(ivLogoID);
 
-        //Relative Layout for Texts
+        //Relative Layout for Text
         RelativeLayout.LayoutParams paramsTxt = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT , LayoutParams.WRAP_CONTENT);
         paramsTxt.addRule(RelativeLayout.RIGHT_OF, ivLogoID);
 
         LinearLayout m_ll = new LinearLayout(context);
+        m_ll.setMinimumWidth(LayoutParams.MATCH_PARENT);
+        m_ll.setMinimumHeight(itemH);
         m_ll.setOrientation(LinearLayout.VERTICAL);
-        m_ll.setGravity(Gravity.BOTTOM);
-        //m_ll.setBackground(getResources().getDrawable(R.drawable.abc_list_pressed_holo_light));
+        m_ll.setGravity(Gravity.CENTER);
 
         TextView m_TextName = new TextView(context);
         m_TextName.setTextSize(16);
