@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
 
                 String albumName = kAName + albumIndex.toString();
 
-                albumList.add(new Album(albumIndex,albumName,null));
+                albumList.add(new Album(albumIndex, albumName, null));
 
                 albumIndex = Singleton.mySettings.getAlbumIndex();
                 Log.d(TAG,"newAlbumIndex:"+albumIndex.toString());
@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
 
                 Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
-                //listView.addView();
+
                 cstAdapter.notifyDataSetChanged();
             }
         });
@@ -120,7 +120,18 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClickListener(View view, Album item, int position) {
                 Toast.makeText(getApplicationContext(),
-                        "On position :  "+position+"  ItemName:  " +item.getName(), Toast.LENGTH_LONG)
+                        "Clicked on ItemList! On position :  "+position+"  ItemName:  " +item.getName(), Toast.LENGTH_LONG)
+                        .show();
+
+                Intent galleryIntent = new Intent(getBaseContext(),GalleryActivity.class);
+                startActivity(galleryIntent);
+
+            }
+
+            @Override
+            public void onPictureClickListener(View view, Album album, int position) {
+                Toast.makeText(getApplicationContext(),
+                        "Clicked on Image! On position :  "+position+"  ItemName:  " +album.getName(), Toast.LENGTH_LONG)
                         .show();
                 albumList.remove(position);
                 cstAdapter.notifyDataSetChanged();

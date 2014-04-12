@@ -27,8 +27,9 @@ public class CustomView extends RelativeLayout{
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 
         ImageView ivLogo = new ImageView(context);
-        ivLogo.setImageDrawable(context.getResources().getDrawable(R.drawable.test));
+        ivLogo.setImageDrawable(context.getResources().getDrawable(R.drawable.delete));
         addView(ivLogo, params);
+        ivLogo.setId(ivLogoID);
 
         //Relative Layout for Texts
         RelativeLayout.LayoutParams paramsTxt = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT , LayoutParams.WRAP_CONTENT);
@@ -46,6 +47,10 @@ public class CustomView extends RelativeLayout{
         m_ll.addView(m_TextName);
 
         addView(m_ll,paramsTxt);
+    }
+
+    public static int getPictureId(){
+        return ivLogoID;
     }
 
     @Override
