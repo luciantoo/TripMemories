@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -65,7 +66,7 @@ public class GalleryActivity extends Activity {
 
         private Context galleryContext;
 
-        private Bitmap[] imageBitmaps;
+        private LinkedList<Bitmap> imageBitmaps;
 
         Bitmap placeholder;
 
@@ -73,12 +74,96 @@ public class GalleryActivity extends Activity {
 
             galleryContext = c;
 
-            imageBitmaps = new Bitmap[10];
+            imageBitmaps = new LinkedList<Bitmap>();
 
-            placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+            File dir = new File(Singleton.m_szPictDir);
+            File[] dirListing = dir.listFiles();
+            if (dirListing != null) {
+                for (File pict : dirListing){
+                    if(!albumName.equals("gallery")){
+                        String tag = pict.getName().toString();
+                        tag = tag.substring(0,7);
+                        Log.d(TAG,tag+"_"+albumName);
+                        if (albumName.equals(tag)) {
+                            Log.d(TAG, pict.getName().toString());
+                            pictureNames.add(pict.getName().toString());
 
-            for (int i = 0; i < imageBitmaps.length; i++)
-                imageBitmaps[i] = placeholder;
+                            File pFile = new File(Singleton.m_szPictDir, pict.getName().toString());
+                            Uri uri = Uri.fromFile(pFile);
+                            String imgPath = uri.getPath();
+                            if (uri != null) {
+                                int targetWidth = 600;
+                                int targetHeight = 400;
+
+                                BitmapFactory.Options bmpOptions = new BitmapFactory.Options();
+                                bmpOptions.inJustDecodeBounds = true;
+                                BitmapFactory.decodeFile(imgPath, bmpOptions);
+
+                                int currHeight = bmpOptions.outHeight;
+                                int currWidth = bmpOptions.outWidth;
+
+                                int sampleSize = 1;
+
+                                if (currHeight > targetHeight || currWidth > targetWidth) {
+                                    //use either width or height
+                                    if (currWidth > currHeight)
+                                        sampleSize = Math.round((float) currHeight / (float) targetHeight);
+                                    else
+                                        sampleSize = Math.round((float) currWidth / (float) targetWidth);
+                                }
+
+                                bmpOptions.inSampleSize = sampleSize;
+                                bmpOptions.inJustDecodeBounds = false;
+                                placeholder = BitmapFactory.decodeFile(imgPath, bmpOptions);
+                                imageBitmaps.add(placeholder);
+//                        PicAdapter imgAdapt = new PicAdapter(this);
+                            }
+
+
+                        }
+                    }
+                    else{
+                        Log.d(TAG, pict.getName().toString());
+                        pictureNames.add(pict.getName().toString());
+                        File pFile = new File(Singleton.m_szPictDir, pict.getName().toString());
+                        Uri uri = Uri.fromFile(pFile);
+                        String imgPath = uri.getPath();
+                        if (uri != null) {
+                            int targetWidth = 600;
+                            int targetHeight = 400;
+
+                            BitmapFactory.Options bmpOptions = new BitmapFactory.Options();
+                            bmpOptions.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFile(imgPath, bmpOptions);
+
+                            int currHeight = bmpOptions.outHeight;
+                            int currWidth = bmpOptions.outWidth;
+
+                            int sampleSize = 1;
+
+                            if (currHeight > targetHeight || currWidth > targetWidth) {
+                                //use either width or height
+                                if (currWidth > currHeight)
+                                    sampleSize = Math.round((float) currHeight / (float) targetHeight);
+                                else
+                                    sampleSize = Math.round((float) currWidth / (float) targetWidth);
+                            }
+
+                            bmpOptions.inSampleSize = sampleSize;
+                            bmpOptions.inJustDecodeBounds = false;
+                            placeholder = BitmapFactory.decodeFile(imgPath, bmpOptions);
+                            imageBitmaps.add(placeholder);
+//                        PicAdapter imgAdapt = new PicAdapter(this);
+                        }
+
+                    }
+                }
+            }
+
+
+
+//            for (int i = 0; i < imageBitmaps.length; i++)
+//                imageBitmaps[i] = placeholder;
 
             TypedArray styleAttrs = galleryContext.obtainStyledAttributes(R.styleable.PicGallery);
 
@@ -90,7 +175,7 @@ public class GalleryActivity extends Activity {
 
         @Override
         public int getCount() {
-            return imageBitmaps.length;
+            return imageBitmaps.size();
         }
 
         @Override
@@ -107,7 +192,7 @@ public class GalleryActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             ImageView imageView = new ImageView(galleryContext);
-            imageView.setImageBitmap(imageBitmaps[position]);
+            imageView.setImageBitmap(imageBitmaps.get(position));
             imageView.setLayoutParams(new Gallery.LayoutParams(300, 200));
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setBackgroundResource(defaultItemBackground);
@@ -115,11 +200,11 @@ public class GalleryActivity extends Activity {
         }
 
         public void addPic(Bitmap newPic) {
-            imageBitmaps[currentPic] = newPic;
+            imageBitmaps.add(newPic);
         }
 
         public Bitmap getPic(int posn) {
-            return imageBitmaps[posn];
+            return imageBitmaps.get(posn);
         }
     }
 
@@ -141,11 +226,8 @@ public class GalleryActivity extends Activity {
 
         picGallery.setAdapter(imgAdapt);
 
-        progressDialog = ProgressDialog.show(this, "Loading", "Please wait...");
 
-        PhotoUpdater pU = new PhotoUpdater();
-//        pU.run();
-        runOnUiThread(pU);
+
 
         picGallery.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
@@ -189,8 +271,8 @@ public class GalleryActivity extends Activity {
 
     }
 
-    private class PhotoUpdater implements Runnable {
-        public void run() {
+     public void PhotoUpdater() {
+
             File dir = new File(Singleton.m_szPictDir);
             File[] dirListing = dir.listFiles();
             if (dirListing != null) {
@@ -211,12 +293,13 @@ public class GalleryActivity extends Activity {
                         pictureNames.add(pict.getName().toString());
                         GA.putPictures(PICKER, RESULT_OK, Uri.fromFile(
                                 new File(Singleton.m_szPictDir, pict.getName().toString())));
+                        imgAdapt.notifyDataSetChanged();
                     }
                 }
             }
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
 
-        }
+
     }
 
 
