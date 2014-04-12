@@ -47,9 +47,11 @@ public class MainActivity extends Activity {
         justToTest.add(alb);
         justToTest.add(alb);
 
-        Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
-        for(String name : Singleton.mySettings.getAlbumNames()){
-            albumList.add(new Album(albumIndex,name,null));
+        if(Singleton.mySettings.getAlbumNames()!=null) {
+            Log.d(TAG, Singleton.mySettings.getAlbumNames().toString());
+            for (String name : Singleton.mySettings.getAlbumNames()) {
+                albumList.add(new Album(albumIndex, name, null));
+            }
         }
 
 

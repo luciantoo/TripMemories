@@ -197,7 +197,16 @@ public class GalleryActivity extends Activity {
                 for (File pict : dirListing){
                     if(albumName!="gallery"){
                         String tag = pict.getName().toString();
-                        tag = tag.substring(0,7);
+
+                        char a_char = tag.charAt(5);
+
+                        if((int)a_char > 9){
+                            tag = tag.substring(0,7);
+                        }
+                        else{
+                            tag = tag.substring(0,6);
+                        }
+
                         Log.d(TAG,tag+"_"+albumName);
                         if (albumName.equals(tag)) {
                             Log.d(TAG, pict.getName().toString());
