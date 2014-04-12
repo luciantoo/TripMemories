@@ -5,6 +5,7 @@ package itec.code2smile;
  */
 import android.content.SharedPreferences.Editor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -23,15 +24,15 @@ public class AppSettings {
         return Singleton.prefs.getString(akey, defaultValue);
     }
 
-    private void setArrayOfStrings(short akey, Set<String> values){
+    private void setArrayOfStrings(short akey, HashSet<String> values){
         Editor editor = Singleton.prefs.edit();
         editor.putStringSet("" + akey, values);
         editor.commit();
 
     }
 
-    private Set<String> getArrayOfStrings(short akey, Set<String> defaultValue){
-        return Singleton.prefs.getStringSet("" + akey,defaultValue);
+    private HashSet<String> getArrayOfStrings(short akey, HashSet<String> defaultValue){
+        return (HashSet<String>) Singleton.prefs.getStringSet("" + akey, defaultValue);
     }
 
     private void setString(short akey, String avalue)    {
@@ -90,11 +91,11 @@ public class AppSettings {
         this.setInt(kLastCreatedAlbumIndex,val);
     }
 
-    public void writeAlbumNames(Set<String> values){
+    public void writeAlbumNames(HashSet<String> values){
         this.setArrayOfStrings(kAlbumNames,values);
     }
 
-    public Set<String> getAlbumNames (){
+    public HashSet<String> getAlbumNames (){
        return this.getArrayOfStrings(kAlbumNames,null);
     }
 
