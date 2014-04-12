@@ -92,8 +92,9 @@ public class MainActivity extends Activity {
                 for(Album i :albumList){
                     albumNames.add(i.getName());
                 }
+
                 Singleton.mySettings.writeAlbumNames(albumNames);
-                Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+                Log.d(TAG, Singleton.mySettings.getAlbumNames().toString());
                 //listView.addView();
             }
         });
