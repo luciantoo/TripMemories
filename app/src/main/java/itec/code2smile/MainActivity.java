@@ -19,7 +19,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MainActivity extends Activity {
@@ -32,7 +31,7 @@ public class MainActivity extends Activity {
     private Integer pictIndex;
     private String TAG = "MainActivity";
     private ArrayList<Album> albumList;
-    private LinkedHashSet<String> albumNames;
+    private HashSet<String> albumNames;
     private CustomAdapter cstAdapter;
 
     @Override
@@ -40,7 +39,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         albumList = new ArrayList<Album>();
-        albumNames = new LinkedHashSet<String>();
+        albumNames = new HashSet<String>();
         albumIndex = Singleton.mySettings.getAlbumIndex();
 
         

@@ -6,26 +6,33 @@
               android:layout_height="match_parent"
               android:background="#000000">
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:padding="5dp"
-              android:text="@string/select_intro"
+    <Button android:layout_width="match_parent"
+              android:layout_height="@dimen/items_height"
+              android:text="@string/takePicture"
               android:gravity="center"
+              android:id="@+id/take_pic"
+              android:textColor="@color/settings_text_color"
               android:textStyle="bold"
-              android:background="#fff3f3f3"/>
+              android:textSize="@dimen/font_medium"
+              android:background="@drawable/background_list"
+              android:drawableRight="@drawable/right_button"
+              android:paddingRight="@dimen/right_padding"/>
 
     <Gallery
             android:id="@+id/gallery"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_list"/>
 
     <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="@dimen/items_height"
               android:gravity="center"
               android:padding="5dp"
               android:textStyle="italic"
               android:text="@string/show_intro"
-              android:background="#fff3f3f3"/>
+              android:background="@drawable/background_list"
+              android:textColor="@color/settings_text_color"
+              android:textSize="@dimen/font_medium"/>
 
     <ImageView
             android:id="@+id/picture"

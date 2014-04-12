@@ -9,5 +9,6 @@
     <string name="select_intro">Long-press a thumbnail to add an image</string>
     <string name="show_intro">Press a thumbnail to display at larger size</string>
     <string name="delete_album">Long-press an Item to delete an Album!</string>
+    <string name="takePicture">Take a picture</string>
 
 </resources>
