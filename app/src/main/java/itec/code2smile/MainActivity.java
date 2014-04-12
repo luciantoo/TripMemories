@@ -28,11 +28,15 @@ public class MainActivity extends Activity {
 
     private final static int ACTIVITY_RESULT = 2;
     private Uri imageUri;
+    private Integer albumIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        albumIndex = Singleton.mySettings.getAlbumIndex();
+        Log.d("Album index",albumIndex.toString());
 
         Button take_btn = (Button)findViewById(R.id.take_picture);
         take_btn.setOnClickListener(new View.OnClickListener() {
