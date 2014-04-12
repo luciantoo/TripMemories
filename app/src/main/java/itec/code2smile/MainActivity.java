@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
                 }
 
                 Singleton.mySettings.writeAlbumNames(albumNames);
-                Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+                Log.d(TAG, Singleton.mySettings.getAlbumNames().toString());
 
                 Toast.makeText(getApplicationContext(),
                         "Album" + albumIndex + " has been created", Toast.LENGTH_LONG)
@@ -203,5 +203,4 @@ public class MainActivity extends Activity {
                 }
             }
     }
-
 }
