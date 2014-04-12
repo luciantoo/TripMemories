@@ -6,5 +6,5 @@ import android.view.View;
  * Created by Sined on 4/12/2014.
  */
 public interface MyOnCheckChangeListener {
-    void onItemClickListener(View view,Album item,int position);
+    void onItemClickListener(View view, Album item, int position);
 }

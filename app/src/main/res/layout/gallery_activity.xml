@@ -11,7 +11,8 @@
               android:padding="5dp"
               android:text="@string/select_intro"
               android:gravity="center"
-              android:textStyle="bold" />
+              android:textStyle="bold"
+              android:background="#fff3f3f3"/>
 
     <Gallery
             android:id="@+id/gallery"
@@ -23,7 +24,8 @@
               android:gravity="center"
               android:padding="5dp"
               android:textStyle="italic"
-              android:text="@string/show_intro" />
+              android:text="@string/show_intro"
+              android:background="#fff3f3f3"/>
 
     <ImageView
             android:id="@+id/picture"

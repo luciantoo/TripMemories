@@ -96,24 +96,23 @@ public class MainActivity extends Activity {
                 Singleton.mySettings.writeAlbumNames(albumNames);
                 Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
 
-                cstAdapter = new CustomAdapter(getBaseContext(), albumList);
-
-                listView.setAdapter(cstAdapter);
-            }
-        });
-
-        Button delete_album = (Button)findViewById(R.id.delete_album);
-        delete_album.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG,"delete_album");
+                cstAdapter.notifyDataSetChanged();
             }
         });
 
         cstAdapter = new CustomAdapter(getBaseContext(), albumList);
+        cstAdapter.setListener(new MyOnCheckChangeListener() {
+            @Override
+            public void onItemClickListener(View view, Album item, int position) {
+                Toast.makeText(getApplicationContext(),
+                        "On position :  "+position+"  ItemName:  " +item.getName(), Toast.LENGTH_LONG)
+                        .show();
+                albumList.remove(position);
+                cstAdapter.notifyDataSetChanged();
+            }
+        });
 
         listView.setAdapter(cstAdapter);
-
     }
 
 

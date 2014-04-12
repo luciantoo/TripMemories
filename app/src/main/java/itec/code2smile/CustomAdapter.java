@@ -21,6 +21,10 @@ public class CustomAdapter extends BaseAdapter {
         this.albumList = albumList;
     }
 
+    public void setListener(MyOnCheckChangeListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public int getCount() {
         return albumList.size();
@@ -47,7 +51,7 @@ public class CustomAdapter extends BaseAdapter {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 if(listener != null)
-                    listener.onItemClickListener(v, myAlbum,Itemposition);
+                    listener.onItemClickListener(v, myAlbum, Itemposition);
             }
         });
 

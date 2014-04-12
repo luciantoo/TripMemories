@@ -50,9 +50,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
-        <Button android:layout_width="match_parent"
+        <TextView android:layout_width="match_parent"
                 android:layout_height="@dimen/items_height"
-                android:text="Delete an Album!"
+                android:text="@string/delete_album"
+                android:gravity="center"
+                android:textSize="20dp"
                 android:id="@+id/delete_album"
                 android:background="@color/background_color"/>
 
