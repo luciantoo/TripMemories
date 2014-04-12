@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
     private Integer albumIndex;
     private String TAG = "MainActivity";
     private ArrayList<Album> albumList;
-    private Set<String> albumNames;
+    private HashSet<String> albumNames;
     private CustomAdapter cstAdapter;
 
     @Override
@@ -39,6 +39,19 @@ public class MainActivity extends Activity {
         albumList = new ArrayList<Album>();
         albumNames = new HashSet<String>();
         albumIndex = Singleton.mySettings.getAlbumIndex();
+
+        ArrayList<String> justToTest = new ArrayList<String>();
+        String alb = new String("dsada");
+        justToTest.add(alb);
+        justToTest.add(alb);
+        justToTest.add(alb);
+
+        Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+        for(String name : Singleton.mySettings.getAlbumNames()){
+            albumList.add(new Album(albumIndex,name,null));
+        }
+
+
         Log.d("Album index",albumIndex.toString());
         final ListView listView = (ListView)findViewById(R.id.list_view);
 
@@ -83,17 +96,19 @@ public class MainActivity extends Activity {
                 Log.d(TAG,"albumIndex:"+albumIndex.toString());
 
                 String albumName = kAName + albumIndex.toString();
-                Album newAlbum = new Album(albumIndex,albumName,null);
-                albumList.add(newAlbum);
-                Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
+
+                albumList.add(new Album(albumIndex,albumName,null));
+
                 albumIndex = Singleton.mySettings.getAlbumIndex();
                 Log.d(TAG,"newAlbumIndex:"+albumIndex.toString());
 
-                for(Album i :albumList){
+                for(Album i : albumList){
                     albumNames.add(i.getName());
                 }
+
                 Singleton.mySettings.writeAlbumNames(albumNames);
                 Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
+                Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
                 //listView.addView();
             }
         });
@@ -106,21 +121,17 @@ public class MainActivity extends Activity {
             }
         });
 
-        ArrayList<String> justToTest = new ArrayList<String>();
-        String alb = new String("dsada");
-        justToTest.add(alb);
-        justToTest.add(alb);
-        justToTest.add(alb);
+
 
         //populate the listview
 
-        for(int i=0;i<10;i++)
-        {
-            Album my_Album;
-            int itemid = 100 + i;
-            my_Album = new Album(itemid,"Values",justToTest);
-            albumList.add(my_Album);
-        }
+//        for(int i=0;i<10;i++)
+//        {
+//            Album my_Album;
+//            int itemid = 100 + i;
+//            my_Album = new Album(itemid,"Values",justToTest);
+//            albumList.add(my_Album);
+//        }
 
         cstAdapter = new CustomAdapter(getBaseContext(), albumList);
 
