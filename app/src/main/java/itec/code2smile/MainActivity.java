@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MainActivity extends Activity {
@@ -35,10 +36,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+        albumList = new ArrayList<Album>();
+        albumNames = new HashSet<String>();
         albumIndex = Singleton.mySettings.getAlbumIndex();
         Log.d("Album index",albumIndex.toString());
-
         final ListView listView = (ListView)findViewById(R.id.list_view);
 
         Button take_btn = (Button)findViewById(R.id.take_picture);
@@ -88,6 +89,11 @@ public class MainActivity extends Activity {
                 albumIndex = Singleton.mySettings.getAlbumIndex();
                 Log.d(TAG,"newAlbumIndex:"+albumIndex.toString());
 
+                for(Album i :albumList){
+                    albumNames.add(i.getName());
+                }
+                Singleton.mySettings.writeAlbumNames(albumNames);
+                Log.d(TAG,Singleton.mySettings.getAlbumNames().toString());
                 //listView.addView();
             }
         });
@@ -107,7 +113,7 @@ public class MainActivity extends Activity {
         justToTest.add(alb);
 
         //populate the listview
-        albumList = new ArrayList<Album>();
+
         for(int i=0;i<10;i++)
         {
             Album my_Album;
