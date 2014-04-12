@@ -54,7 +54,7 @@ public class GalleryActivity extends Activity{
 
             galleryContext = c;
 
-            imageBitmaps  = new Bitmap[10];
+            imageBitmaps  = new Bitmap[3];
 
             placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 

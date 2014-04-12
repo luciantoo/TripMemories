@@ -5,12 +5,15 @@ package itec.code2smile;
  */
 import android.content.SharedPreferences.Editor;
 
+import java.util.Set;
+
 
 public class AppSettings {
 
     public static short kLastOpenedAlbumName = 0;
     public static short kLastCreatedAlbumIndex = 1;
     public static short KEY2 = 2;
+    public static short kAlbumNames = 3;
 
     private String getString(short akey)    {
         return Singleton.prefs.getString("" + akey, "");
@@ -19,6 +22,18 @@ public class AppSettings {
     private String getString(String akey, String defaultValue)    {
         return Singleton.prefs.getString(akey, defaultValue);
     }
+
+    private void setArrayOfStrings(short akey, Set<String> values){
+        Editor editor = Singleton.prefs.edit();
+        editor.putStringSet("" + akey, values);
+        editor.commit();
+
+    }
+
+    private Set<String> getArrayOfStrings(short akey, Set<String> defaultValue){
+        return Singleton.prefs.getStringSet("" + akey,defaultValue);
+    }
+
     private void setString(short akey, String avalue)    {
         Editor editor = Singleton.prefs.edit();
         editor.putString("" + akey, avalue);
@@ -73,6 +88,14 @@ public class AppSettings {
 
     public void incrementAlbumIndex(int val){
         this.setInt(kLastCreatedAlbumIndex,val);
+    }
+
+    public void writeAlbumNames(Set<String> values){
+        this.setArrayOfStrings(kAlbumNames,values);
+    }
+
+    public Set<String> getAlbumNames (){
+       return this.getArrayOfStrings(kAlbumNames,null);
     }
 
 }

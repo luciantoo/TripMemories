@@ -18,16 +18,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class MainActivity extends Activity {
 
+    private final static String kAName = "Album";
     private final static int ACTIVITY_RESULT = 2;
     private Uri imageUri;
     private Integer albumIndex;
     private String TAG = "MainActivity";
     private ArrayList<Album> albumList;
+    private Set<String> albumNames;
     private CustomAdapter cstAdapter;
-    private int contor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +77,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"create_album");
+                albumIndex = Singleton.mySettings.getAlbumIndex();
 
-                //Album my_album = new Album(contor,nume_album_citit,null);
+                Log.d(TAG,"albumIndex:"+albumIndex.toString());
+
+                String albumName = kAName + albumIndex.toString();
+                Album newAlbum = new Album(albumIndex,albumName,null);
+                albumList.add(newAlbum);
+                Singleton.mySettings.incrementAlbumIndex(albumIndex+1);
+                albumIndex = Singleton.mySettings.getAlbumIndex();
+                Log.d(TAG,"newAlbumIndex:"+albumIndex.toString());
 
                 //listView.addView();
             }
