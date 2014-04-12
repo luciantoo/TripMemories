@@ -15,24 +15,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
     private final static int ACTIVITY_RESULT = 2;
     private Uri imageUri;
+    private String TAG = "MainActivity";
+    private ArrayList<Album> strings;
+    private CustomAdapter cstAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final ListView listView = (ListView)findViewById(R.id.list_view);
 
         Button take_btn = (Button)findViewById(R.id.take_picture);
         take_btn.setOnClickListener(new View.OnClickListener() {
@@ -44,8 +48,7 @@ public class MainActivity extends Activity {
                 if (Environment.MEDIA_MOUNTED.equals(state))
                 {
                     Log.d("State",state);
-                    Log.d("File created:",Singleton.m_szWorkDir);
-                    File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
+                    File photoFile = new File(Environment.getExternalStorageDirectory(),"photo.jpg");
                     mIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
                     imageUri = Uri.fromFile(photoFile);
                 }
@@ -64,6 +67,47 @@ public class MainActivity extends Activity {
 
             }
         });
+
+        Button create_album = (Button)findViewById(R.id.create_album);
+        create_album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG,"create_album");
+
+                //Album my_album = new Album();
+
+                //listView.addView();
+            }
+        });
+
+        Button delete_album = (Button)findViewById(R.id.delete_album);
+        delete_album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG,"delete_album");
+            }
+        });
+
+        ArrayList<String> justToTest = new ArrayList<String>();
+        String alb = new String("dsada");
+        justToTest.add(alb);
+        justToTest.add(alb);
+        justToTest.add(alb);
+
+        //populate the listview
+        strings = new ArrayList<Album>();
+        for(int i=0;i<10;i++)
+        {
+            Album my_Album;
+            int itemid = 100 + i;
+            my_Album = new Album(itemid,"Values",justToTest);
+            strings.add(my_Album);
+        }
+
+        cstAdapter = new CustomAdapter(getBaseContext(),strings);
+
+        listView.setAdapter(cstAdapter);
+
     }
 
 
@@ -98,13 +142,10 @@ public class MainActivity extends Activity {
 
                 try {
 
-                    ImageView img = (ImageView)findViewById(R.id.image_view);
-
                     InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inSampleSize = 8;
                     Bitmap myBitmap = BitmapFactory.decodeStream(inputStream, null, options);
-                    img.setImageBitmap(myBitmap);
 
                 } catch (NullPointerException e) {
                     e.printStackTrace();

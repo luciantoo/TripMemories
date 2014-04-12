@@ -1,7 +1,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#ff000000">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:tools="http://schemas.android.com/tools"
@@ -11,21 +12,67 @@
                  tools:context="itec.code2smile.MainActivity"
                  tools:ignore="MergeRootFrame" />
 
-    <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/take_picture"
-            android:text="Take a picuture!"
-            android:layout_alignParentTop="true"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
 
-    <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/open_gallery"
-            android:text="Gallery"
-            android:layout_below="@+id/take_picture"/>
 
-    <ImageView android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:id="@+id/image_view"
-               android:layout_below="@+id/open_gallery"/>
+        <Button android:layout_width="match_parent"
+                android:layout_height="@dimen/items_height"
+                android:id="@+id/take_picture"
+                android:text="Take a picuture!"
+                android:background="@color/background_color"/>
 
+        <View
+                android:background="@color/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="@dimen/items_height"
+                android:id="@+id/open_gallery"
+                android:text="Gallery"
+                android:background="@color/background_color"/>
+
+        <View
+                android:background="@color/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="@dimen/items_height"
+                android:text="Create new Album!"
+                android:id="@+id/create_album"
+                android:background="@color/background_color"/>
+
+        <View
+                android:background="@color/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="@dimen/items_height"
+                android:text="Delete an Album!"
+                android:id="@+id/delete_album"
+                android:background="@color/background_color"/>
+
+        <View
+                android:background="@color/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="@dimen/items_height"
+                  android:id="@+id/text_view"
+                  android:text="Existing Albums!"
+                  android:gravity="center"
+                  android:textSize="30dp"
+                  android:background="@color/background_color"/>
+
+        <ListView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/list_view"
+                  android:background="@color/background_color"></ListView>
+
+    </LinearLayout>
 </RelativeLayout>
