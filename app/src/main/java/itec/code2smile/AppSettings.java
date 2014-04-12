@@ -8,8 +8,9 @@ import android.content.SharedPreferences.Editor;
 
 public class AppSettings {
 
-    public static short KEY = 0;
-    public static short KEY2 = 1;
+    public static short kLastOpenedAlbumName = 0;
+    public static short kLastCreatedAlbumIndex = 1;
+    public static short KEY2 = 2;
 
     private String getString(short akey)    {
         return Singleton.prefs.getString("" + akey, "");
@@ -49,11 +50,11 @@ public class AppSettings {
     //custom methods (public)
 
     public void saveData(String str){
-        this.setString(KEY, str);
+        this.setString(kLastOpenedAlbumName, str);
     }
 
     public String getData(){
-        return this.getString(KEY);
+        return this.getString(kLastOpenedAlbumName);
     }
 
     public void setState(boolean val){
@@ -62,6 +63,16 @@ public class AppSettings {
 
     public boolean getState(){
         return this.getBoolean(KEY2);
+    }
+
+
+
+    public int getAlbumIndex(){
+        return this.getInt(kLastCreatedAlbumIndex);
+    }
+
+    public void incrementAlbumIndex(int val){
+        this.setInt(kLastCreatedAlbumIndex,val);
     }
 
 }

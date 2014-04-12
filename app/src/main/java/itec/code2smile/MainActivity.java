@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 
     private final static int ACTIVITY_RESULT = 2;
     private Uri imageUri;
+    private Integer albumIndex;
     private String TAG = "MainActivity";
     private ArrayList<Album> strings;
     private CustomAdapter cstAdapter;
@@ -35,6 +36,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        albumIndex = Singleton.mySettings.getAlbumIndex();
+        Log.d("Album index",albumIndex.toString());
 
         final ListView listView = (ListView)findViewById(R.id.list_view);
 
@@ -48,7 +52,8 @@ public class MainActivity extends Activity {
                 if (Environment.MEDIA_MOUNTED.equals(state))
                 {
                     Log.d("State",state);
-                    File photoFile = new File(Environment.getExternalStorageDirectory(),"photo.jpg");
+                    Log.d("File created:",Singleton.m_szWorkDir);
+                    File photoFile = new File(Singleton.m_szPictDir,"photo.jpg");
                     mIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
                     imageUri = Uri.fromFile(photoFile);
                 }
