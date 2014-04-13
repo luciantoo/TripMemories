@@ -19,7 +19,10 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.AdapterView;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -39,11 +42,11 @@ public class GalleryActivity extends Activity {
 
     private final static String INTENT_EXTRA_TAG = "albumName";
 
-    private int count;
+    private static int count=0;
 
     private String albumName;
 
-    private File photoFile = new File(Singleton.m_szPictDir, "photo.jpg");
+    private File photoFile = new File("photo.jpg");
 
     private LinkedList<String> pictureNames;
 
@@ -78,6 +81,9 @@ public class GalleryActivity extends Activity {
             File dir = new File(Singleton.m_szPictDir);
             File[] dirListing = dir.listFiles();
             if (dirListing != null) {
+
+                count=0;
+
                 for (File pict : dirListing){
                     if(!albumName.equals("gallery")){
                         String tag = pict.getName().toString();
@@ -86,6 +92,12 @@ public class GalleryActivity extends Activity {
                         }else{
                             tag = tag.substring(0,6);
                         }
+
+                        Log.d("Iteration","count "+count);
+                        Log.d("SUBSTRING",""+tag);
+
+
+
                         Log.d(TAG,tag+"_"+albumName);
                         if (albumName.equals(tag)) {
                             Log.d(TAG, pict.getName().toString());
@@ -119,11 +131,10 @@ public class GalleryActivity extends Activity {
                                 bmpOptions.inJustDecodeBounds = false;
                                 placeholder = BitmapFactory.decodeFile(imgPath, bmpOptions);
                                 imageBitmaps.add(placeholder);
-
+                                count++;
                             }
-
-
                         }
+
                     }
                     else{
                         Log.d(TAG, pict.getName().toString());
@@ -156,12 +167,13 @@ public class GalleryActivity extends Activity {
                             bmpOptions.inJustDecodeBounds = false;
                             placeholder = BitmapFactory.decodeFile(imgPath, bmpOptions);
                             imageBitmaps.add(placeholder);
-
+                            count++;
                         }
 
                     }
                 }
             }
+
 
             TypedArray styleAttrs = galleryContext.obtainStyledAttributes(R.styleable.PicGallery);
 
@@ -220,24 +232,6 @@ public class GalleryActivity extends Activity {
 
         picGallery = (Gallery) findViewById(R.id.gallery);
 
-        take_button = (Button)findViewById(R.id.take_pic);
-        take_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-
-                String state = Environment.getExternalStorageState();
-                Log.d("State", state);
-                Log.d("File created:", Singleton.m_szWorkDir);
-                photoFile = new File(Singleton.m_szPictDir, albumName + count + albumName + ".jpg");
-                count++;
-                mIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-
-                startActivityForResult(mIntent, PICKER);
-            }
-        });
-
-
         imgAdapt = new PicAdapter(this);
 
         picGallery.setAdapter(imgAdapt);
@@ -265,6 +259,8 @@ public class GalleryActivity extends Activity {
                         "Selected image has been transfered!", Toast.LENGTH_LONG)
                         .show();
 
+                imgAdapt.notifyDataSetChanged();
+
                 return true;
             }
         });
@@ -281,6 +277,25 @@ public class GalleryActivity extends Activity {
             }
         });
 
+        take_button = (Button)findViewById(R.id.take_pic);
+        take_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+
+                count++;
+
+                String state = Environment.getExternalStorageState();
+                Log.d("State", state);
+                Log.d("File created:", Singleton.m_szWorkDir);
+                photoFile = new File(Singleton.m_szPictDir, albumName + count + albumName + ".jpg");
+
+                mIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+
+                startActivityForResult(mIntent, PICKER);
+            }
+        });
+
     }
 
      public void PhotoUpdater() {
@@ -294,12 +309,14 @@ public class GalleryActivity extends Activity {
 
                         char a_char = tag.charAt(5);
 
-                        if((int)a_char > 9){
+                        if( ((int)a_char - 48) > 9){
                             tag = tag.substring(0,7);
                         }
                         else{
                             tag = tag.substring(0,6);
                         }
+
+
 
                         Log.d(TAG,tag+"_"+albumName);
                         if (albumName.equals(tag)) {
